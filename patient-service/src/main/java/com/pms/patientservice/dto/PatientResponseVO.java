@@ -1,5 +1,6 @@
 package com.pms.patientservice.dto;
 
+// aka PatientResponseDTO
 public class PatientResponseVO {
     private String id;
     private String name;
