@@ -1,7 +1,9 @@
 package com.pms.patientservice.service;
 
+import com.pms.patientservice.commons.PatientServiceCommonsConstants;
 import com.pms.patientservice.dto.PatientRequestVO;
 import com.pms.patientservice.dto.PatientResponseVO;
+import com.pms.patientservice.exceptions.EmailAlreadyExistsException;
 import com.pms.patientservice.mapper.PatientMapper;
 import com.pms.patientservice.model.Patient;
 import com.pms.patientservice.repository.PatientRepository;
@@ -23,6 +25,10 @@ public class PatientService {
     }
 
     public PatientResponseVO createPatient(PatientRequestVO patientRequestVO) {
+        if (patientRepository.existsByEmail(patientRequestVO.getEmail())) {
+            throw new EmailAlreadyExistsException(PatientServiceCommonsConstants.EMAIL_ALREADY_EXISTS + PatientServiceCommonsConstants.COLON_WITH_TRAILING_SPACES + patientRequestVO.getEmail());
+        }
+
         Patient patient = patientRepository.save((PatientMapper.toPatientEntityModelRequestDTO(patientRequestVO)));
         return PatientMapper.toPatientResponseDTO(patient);
     }
