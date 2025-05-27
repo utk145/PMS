@@ -42,7 +42,7 @@ public class PatientService {
 
     public PatientResponseVO updatePatient(UUID patientId, PatientRequestVO patientRequestVO) {
         Patient patient = this.patientRepository.findById(patientId).orElseThrow(() -> new PatientNotFoundException("Patient mot found with ID: " + patientId));
-//        #TODO: uncomment and test this when connected to actual database as currently the data stored in in-memory db h2 is incorrect
+//        #TODO: uncomment and test this when connected to actual database as currently the data stored in in-memory db h2 is different from what is being retrieved
 //        if (!patient.getEmail().trim().equalsIgnoreCase(patientRequestVO.getEmail().trim())) {
 //            throw new EmailAlreadyExistsException(EMAIL_UPDATE_NOT_ALLOWED_HERE);
 //        }
