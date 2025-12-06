@@ -1,4 +1,4 @@
-package com.pms.billing_service;
+package com.pms.billingservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

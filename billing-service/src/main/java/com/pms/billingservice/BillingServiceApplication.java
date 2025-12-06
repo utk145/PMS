@@ -1,4 +1,4 @@
-package com.pms.billing_service;
+package com.pms.billingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
