@@ -39,7 +39,7 @@ public class PatientController {
 
     @PutMapping("/update-patient/{patientId}")
     @Operation(summary = "Update an existing patient", description = "Updates an existing patient in the system")
-    public ResponseEntity<PatientResponseVO> updatePatient(@PathVariable UUID patientId, @Validated({Default.class}) @RequestBody PatientRequestVO patientRequestVO) {
+    public ResponseEntity<PatientResponseVO> updatePatient(@PathVariable(value = "patientId") UUID patientId, @Validated({Default.class}) @RequestBody PatientRequestVO patientRequestVO) {
         return ResponseEntity.ok().body(this.patientService.updatePatient(patientId, patientRequestVO));
     }
 
