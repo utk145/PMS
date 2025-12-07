@@ -8,6 +8,7 @@ import com.pms.patientservice.dto.PatientRequestVO;
 import com.pms.patientservice.dto.PatientResponseVO;
 import com.pms.patientservice.exceptions.EmailAlreadyExistsException;
 import com.pms.patientservice.exceptions.PatientNotFoundException;
+import com.pms.patientservice.grpc.BillingServiceGrpcClient;
 import com.pms.patientservice.mapper.PatientMapper;
 import com.pms.patientservice.model.Patient;
 import com.pms.patientservice.repository.PatientRepository;
@@ -15,16 +16,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
     private final PatientRepository patientRepository;
 
-    public PatientService(PatientRepository patientRepository) {
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
+
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
         this.patientRepository = patientRepository; // injecting the repository
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<PatientResponseVO> getPatients() {
@@ -37,6 +39,9 @@ public class PatientService {
         }
 
         Patient patient = patientRepository.save((PatientMapper.toPatientEntityModelRequestDTO(patientRequestVO)));
+
+        this.billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+
         return PatientMapper.toPatientResponseDTO(patient);
     }
 

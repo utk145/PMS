@@ -1,5 +1,8 @@
 package com.pms.patientservice.grpc;
 
+import billing.BillingRequest;
+import billing.BillingResponse;
+import billing.BillingServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;

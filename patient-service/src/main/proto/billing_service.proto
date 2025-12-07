@@ -1,9 +1,8 @@
 syntax = "proto3";
 
-// this means it is going to split our service requests response files all into different files
 option java_multiple_files = true;
-
-option java_package = "com.pms.billingservice.grpc";
+option java_package = "billing";
+option java_outer_classname = "BillingServiceOuterClass";
 
 service BillingService {
     rpc CreateBillingAccount (BillingRequest) returns (BillingResponse);
