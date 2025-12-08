@@ -11,4 +11,5 @@ public class PatientServiceCommonsConstants {
     public static final String MESSAGE_TEXT = "message";
     public static final String EMAIL_UPDATE_NOT_ALLOWED_HERE = "Email update is not allowed. Please connect with admin or customer support to update the email address";
     public static final String PATIENT_NOT_FOUND_EXCEPTION_STRING = "Patient Not Found";
+    public static final String PATIENT_CREATED_EVENT_STRING = "PATIENT_CREATED";
 }

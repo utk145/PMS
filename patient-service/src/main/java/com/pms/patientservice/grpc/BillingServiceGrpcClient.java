@@ -24,7 +24,7 @@ public class BillingServiceGrpcClient {
 
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(serverAddress, serverPort).usePlaintext().build();
 
-        blockingStub = BillingServiceGrpc.newBlockingStub(managedChannel);
+        blockingStub = BillingServiceGrpc.newBlockingStub(managedChannel); // this is a blocking stub, which means that it will block the thread until the response is received
 
     }
 
