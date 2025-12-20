@@ -1,5 +1,6 @@
 package com.pms.authservice.util;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -56,43 +57,53 @@ public class JwtUtil {
                 .signWith(secretKey)   // algorithm inferred (HS256)
                 .compact();
     }
+
+    public void validateToken(String inputToken) {
+        try {
+            Jwts.parser()
+                    .verifyWith(this.secretKey)
+                    .build()
+                    .parseSignedClaims(inputToken);
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT signature");
+        } catch (Exception e) {
+            throw new JwtException("Invalid JWT");
+        }
+
+    }
 }
 
 /**
  * We used @PostConstruct because Spring injects @Value fields after the constructor runs.
-
-     @Value("${jwt.secret}")
-     private String secret;
-     public JwtUtil() {
-         byte[] keyBytes = Base64.getDecoder().decode(secret); // ❌ secret is null
-         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-     }
-
-     At constructor time:
-        - secret is still null
-        - Spring hasn’t injected @Value yet
-        → NullPointerException
-        Do not mix constructor injection + dependency injection.
-
-        Method 2-
-         @Component
-         public class JwtUtil {
-
-                 private final SecretKey secretKey;
-                 private final long expirationMs;
-                 private final String issuer;
-
-                 public JwtUtil(
-                     @Value("${jwt.secret}") String secret,
-                     @Value("${jwt.expiration-ms}") long expirationMs,
-                     @Value("${jwt.issuer}") String issuer
-                 ) {
-                     byte[] keyBytes = Base64.getDecoder().decode(secret);
-                     this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-                     this.expirationMs = expirationMs;
-                     this.issuer = issuer;
-                     }
-         }
-
-
+ *
+ * @Value("${jwt.secret}") private String secret;
+ * public JwtUtil() {
+ * byte[] keyBytes = Base64.getDecoder().decode(secret); // ❌ secret is null
+ * this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+ * }
+ * <p>
+ * At constructor time:
+ * - secret is still null
+ * - Spring hasn’t injected @Value yet
+ * → NullPointerException
+ * Do not mix constructor injection + dependency injection.
+ * <p>
+ * Method 2-
+ * @Component public class JwtUtil {
+ * <p>
+ * private final SecretKey secretKey;
+ * private final long expirationMs;
+ * private final String issuer;
+ * <p>
+ * public JwtUtil(
+ * @Value("${jwt.secret}") String secret,
+ * @Value("${jwt.expiration-ms}") long expirationMs,
+ * @Value("${jwt.issuer}") String issuer
+ * ) {
+ * byte[] keyBytes = Base64.getDecoder().decode(secret);
+ * this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+ * this.expirationMs = expirationMs;
+ * this.issuer = issuer;
+ * }
+ * }
  */
